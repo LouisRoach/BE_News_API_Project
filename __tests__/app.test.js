@@ -3,7 +3,8 @@ const seed = require('../db/seeds/seed');
 const request = require ('supertest');
 const app = require('../app');
 const db = require('../db/connection');
-const { forEach } = require('../db/data/test-data/topics');
+const endpoints = require('../db/endpoints.json')
+
 
 beforeEach(() => {
     return seed({topicData, userData, articleData, commentData})
@@ -19,19 +20,26 @@ describe('GET /api/topics' , () =>{
         .get('/api/topics')
         .expect(200)
         .then(({body}) =>{
-            console.log(body.topics)
+            expect(body.topics).toHaveLength(3)
             expect(Array.isArray(body.topics)).toBe(true)
 
-            body.topics.forEach((obj) => expect(obj).toHaveProperty('slug'))
-            body.topics.forEach((obj) => expect(obj).toHaveProperty('description'))
-
-            /*expect(Object.hasOwn(body.topics[0],'slug','description')).toBe(true)
-            expect(Object.hasOwn(body.topics[1],'slug','description')).toBe(true)
-            expect(Object.hasOwn(body.topics[2],'slug','description')).toBe(true)*/
-
+            body.topics.forEach;{(obj) => expect(obj).toHaveProperty('slug').toHaveProperty('description')}
+            
+            
         })
 
     })
     
         
     })
+
+    describe('GET /api', () => {
+        it('responds with JSON containing all endpoints',  () => {
+            return request(app)
+            .get('/api')
+            .expect(200)
+            .then(({body}) => { 
+                expect(body).toEqual(endpoints)})
+          
+        });
+      });

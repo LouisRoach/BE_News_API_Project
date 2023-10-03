@@ -30,6 +30,9 @@
   "dependencies": {
     "dotenv": "^16.0.0",
     "express": "^4.18.2",
+    "flat": "^6.0.1",
+    "flatnest": "^1.0.0",
+    "obj-flatten": "^2.0.6",
     "pg": "^8.11.3"
   },
   "jest": {
