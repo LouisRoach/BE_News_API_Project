@@ -1,4 +1,4 @@
-const  {selectAllTopics, selectEndpoints}  = require("../models/models")
+const  {selectAllTopics, selectArticleById, selectAllArticles,selectCommentById}  = require("../models/models")
 
 
 exports.getAllTopics = (req,res) => {
@@ -8,3 +8,39 @@ exports.getAllTopics = (req,res) => {
     })
 }
 
+exports.getArticleById = (req, res) => {
+    const { article_id } = req.params;
+   
+    selectArticleById(article_id).then((article) => {
+        if(!article){
+            return res.status(404).send({msg: '404 not found'})
+        }
+        
+      res.status(200).send({article})
+})
+}
+
+exports.getAllArticles = (req,res) => {
+    selectAllArticles().then((articles)=>{
+        res.status(200).send({articles})
+    })
+}
+
+exports.getCommentsById = (req, res) => {
+    const { article_id } = req.params
+    selectCommentById(article_id).then((comment)=>{
+      
+        if(!comment){
+            console.log(comment, "controller")
+            return res.status(404).send({msg: '404 not found'})
+        }
+
+        
+        
+        if(comment.length === 0){
+            return res.status(404).send({msg: '404 article has no comments'})
+        }
+
+        res.status(200).send({comment})
+    })
+ }
