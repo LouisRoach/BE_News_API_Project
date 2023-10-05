@@ -143,7 +143,20 @@ describe('GET /api/topics' , () =>{
 })
       
 
-   /* describe('POST /api/articles/:article_id/comments' , () => {
-        it('accepts an object with username and body, responds with posted comment' )
-    })
-*/
+  /* describe.only('POST /api/articles/:article_id/comments' , () => {
+        it('accepts an object with username and body, responds with posted comment', () =>{
+            return request(app)
+            .post('/api/articles/:article_id/comments')
+            .expect(200)
+            .then(({body})=> {
+
+                console.log(body)
+
+                expect(body).toHaveProperty(comment)
+
+                
+                
+
+            })
+        } )
+    })*/

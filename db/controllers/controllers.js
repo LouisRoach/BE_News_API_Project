@@ -37,10 +37,17 @@ exports.getCommentsById = (req, res) => {
 
         
         
-        if(comment.length === 0){
-            return res.status(404).send({msg: '404 article has no comments'})
-        }
+     
 
         res.status(200).send({comment})
     })
+ }
+
+
+ exports.postCommentToArticle = (req, res) => {
+    const {article_id} = req.params
+    addCommentToArticle(article_id).then((comment)=>{
+        return res.status(200).send({comment})
+    })
+
  }
