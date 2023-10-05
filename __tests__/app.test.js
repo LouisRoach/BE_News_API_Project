@@ -71,6 +71,7 @@ describe('GET /api/topics' , () =>{
         .get('/api/articles/14')
         .expect(404)
         .then(({body}) =>{
+            console.log(body)
             expect(body).toEqual({msg: '404 not found'})
         })
       })
@@ -105,11 +106,12 @@ describe('GET /api/topics' , () =>{
     })
 
     describe('GET /api/articles/:article_id/comments' , () => {
-        it.only('responds with an array of comments for the given article_id with correct properties' , () => {
+        it('responds with an array of comments for the given article_id with correct properties' , () => {
             return request(app)
             .get('/api/articles/1/comments')
             .expect(200)
             .then(({body}) =>{
+                console.log(body)
                 
                 body.comment.forEach((comment) => expect(comment).toHaveProperty('comment_id'))
                 body.comment.forEach((comment) => expect(comment).toHaveProperty('votes'))
@@ -122,20 +124,28 @@ describe('GET /api/topics' , () =>{
 
         })
 
-        it.only('responds with an error if invalid link is passed' , () => {
+        it('responds with an error if link is for non-existent is passed' , () => {
             return request(app)
-            .get('/api/articles/14/comments')
+            .get('/api/articles/15/comments')
             .expect(404)
             .then(({body}) =>{
+                console.log(body)
                
-                expect(body).toEqual({msg: '404 not found'})
+                expect(body).toEqual({msg: '404 article not found'})
 
-        })
-
-        
-
-  
+        }) 
     })
+
+   it('responds with an error message if article has no comments' , () =>{
+    return request(app)
+    .get('/api/articles/8/comments')
+    .expect(200)
+    .then(({body})=>{
+        console.log(body)
+        expect(body).toEqual({msg: 'article has no comments'})
+
+    })
+   })
 
  
 
@@ -143,20 +153,38 @@ describe('GET /api/topics' , () =>{
 })
       
 
-  /* describe.only('POST /api/articles/:article_id/comments' , () => {
+  describe('POST /api/articles/:article_id/comments' , () => {
         it('accepts an object with username and body, responds with posted comment', () =>{
             return request(app)
-            .post('/api/articles/:article_id/comments')
+            .post('/api/articles/8/comments')
+            .send({body:'Hello', username: 'butter_bridge'})
             .expect(200)
             .then(({body})=> {
 
                 console.log(body)
 
-                expect(body).toHaveProperty(comment)
+                expect(body.comment).toHaveProperty('author')
+                expect(body.comment).toHaveProperty('body')
 
                 
                 
 
             })
         } )
-    })*/
+    })
+
+    describe.only('GET /api/users' , () => {
+        it('responds with an array of users objects with correct properties' , () =>{
+            return request(app)
+            .get('/api/users')
+            .expect(200)
+            .then(({body})=>{
+                console.log(body)
+                expect(Array.isArray(body)).toBe(true)
+                body.forEach((user) => expect(user).toHaveProperty('username'))
+                body.forEach((user) => expect(user).toHaveProperty('name'))
+                body.forEach((user) => expect(user).toHaveProperty('avatar_url'))
+
+            })
+        }  )
+    })
