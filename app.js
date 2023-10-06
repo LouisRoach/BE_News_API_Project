@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const { getAllTopics, getArticleById, getAllArticles, getCommentsById, postCommentToArticle } = require('./db/controllers/controllers')
+const { getAllTopics, getArticleById, getAllArticles, getCommentsById, postCommentToArticle, patchController } = require('./db/controllers/controllers')
 const endpoints = require('./db/endpoints.json')
 const users = require('./db/data/test-data/users')
 
@@ -21,6 +21,9 @@ app.post('/api/articles/:article_id/comments' , postCommentToArticle)
 app.get('/api/users', (req,res) =>{
     res.status(200).send(users)
 })
+
+
+app.patch('/api/articles/:article_id', patchController)
 
 
 

@@ -1,4 +1,4 @@
-const  {selectAllTopics, selectArticleById, selectAllArticles,selectCommentById,addCommentToArticle}  = require("../models/models")
+const  {selectAllTopics, selectArticleById, selectAllArticles,selectCommentById,addCommentToArticle,patchModel}  = require("../models/models")
 
 
 exports.getAllTopics = (req,res) => {
@@ -50,6 +50,14 @@ exports.getCommentsById = (req, res) => {
  exports.postCommentToArticle = (req, res) => {
     console.log(req.body)
    const { article_id } = req.params
+   if(!req.body.username){
+    return res.status(400).send({msg: 'Username not present'})
+   }
+   else 
+   if(!req.body.body){
+    return res.status(400).send({msg: 'Body not present'})
+
+   }
     const { username, body } = req.body
     
     addCommentToArticle(article_id, username, body).then((comment)=>{
@@ -60,3 +68,32 @@ exports.getCommentsById = (req, res) => {
     })
 
  }
+
+
+ exports.patchController = (req,res) => {
+    const {article_id} = req.params
+    const { inc_votes } = req.body
+    selectArticleById(article_id).then((article) => {
+        if (!article){
+            return res.status(400)
+            .send({msg: 'invalid, article id not present'}) }
+
+            else 
+            if(isNaN(inc_votes)){
+                return res.status(400)
+                .send({msg: 'inc_votes is not a number'})
+            }
+
+            patchModel(article_id,inc_votes).then((result)=>{
+                return res.status(200).send({result})
+            })
+    })  
+     
+
+
+
+ }
+
+
+
+
