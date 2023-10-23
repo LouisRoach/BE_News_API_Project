@@ -37,8 +37,13 @@ exports.selectCommentById = (article_id) =>{
             return result.rows
         
         })
+        .catch((error) => {
+            
+            throw error;
+          });
+      };
 
-}
+
 
 exports.addCommentToArticle = (article_id, username, body) =>{
     console.log('model')
@@ -58,3 +63,43 @@ exports.patchModel = (article_id, inc_votes) =>{
         return article.rows[0]
     })
 }
+
+
+exports.commentDeleteController = (req, res) => {
+
+    const { comment_id } = req.params;
+  
+    commentDeleteModel(comment_id)
+  
+      .then((deleted) => {
+  
+        if(deleted) {
+          console.log('Comment deleted successfully');
+          return res.status(204).send();
+        } 
+        
+        console.log('Comment not found');
+        res.status(404).json({ msg: 'Comment not found' });
+  
+      })
+      .catch((err) => {
+        console.error('Error deleting comment:', err);
+        res.status(500).json({ msg: 'Internal server error' });
+      });
+  
+  }
+
+
+
+
+/*exports.commentDeleteModel = (comment_id) => {
+    return db.query('DELETE FROM comments WHERE comment_id = $1 RETURNING *;', [comment_id])
+        .then((result) => {
+            console.log(result)
+            return true;
+        })
+        .catch((error) => {
+            console.error(error);
+            throw error;
+        });
+}*/

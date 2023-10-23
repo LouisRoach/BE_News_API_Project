@@ -1,4 +1,4 @@
-const  {selectAllTopics, selectArticleById, selectAllArticles,selectCommentById,addCommentToArticle,patchModel}  = require("../models/models")
+const  {selectAllTopics, selectArticleById, selectAllArticles,selectCommentById,addCommentToArticle,patchModel,commentDeleteModel}  = require("../models/models")
 
 
 exports.getAllTopics = (req,res) => {
@@ -27,22 +27,33 @@ exports.getAllArticles = (req,res) => {
 }
 
 exports.getCommentsById = (req, res) => {
-    const { article_id } = req.params
-    
-    selectArticleById(article_id).then((article)=>{
-        if(!article){
-            return res.status(404).send({ msg: 'Article not found' })
-
+    const { article_id } = req.params;
+  
+    selectArticleById(article_id)
+      .then((article) => {
+        if (!article) {
+          return res.status(404).send({ msg: 'Article not found' });
         }
-    })
-    selectCommentsByArticleId(article_id)
-                .then((comments) => {
-                    if (comments.length === 0) {
-                        return res.status(200).send({ msg: 'No comments found for this article' })}
-
-                    res.status(200).send({ comments });
-                })
+  
+        return selectCommentById(article_id)
+          .then((comments) => {
+            if (comments.length === 0) {
+              return res.status(200).send({ msg: 'No comments found for this article' });
             }
+  
+            res.status(200).send({ comments });
+          })
+          .catch((error) => {
+            res.status(500).send({ error: 'Internal Server Error' });
+          });
+      })
+      .catch((error) => {
+        res.status(500).send({ error: 'Internal Server Error' });
+      });
+  };
+  
+
+
     
     
 
@@ -95,5 +106,42 @@ exports.getCommentsById = (req, res) => {
  }
 
 
+ exports.commentDeleteController = (req, res) => {
 
+    const { comment_id } = req.params;
+  
+    commentDeleteModel(comment_id)
+  
+      .then((deleted) => {
+  
+        if(deleted) {
+          console.log('Comment deleted successfully');
+          return res.status(204).send();
+        } 
+        
+        console.log('Comment not found');
+        res.status(404).json({ msg: 'Comment not found' });
+  
+      })
+      .catch((err) => {
+        console.error('Error deleting comment:', err);
+        res.status(500).json({ msg: 'Internal server error' });
+      });
+  
+  }
 
+ /*exports.commentDeleteController = (req, res) => {
+    const { comment_id } = req.params;
+    commentDeleteModel(comment_id)
+        .then((result) => {
+            if (result) {
+                res.status(204).send();
+            } else {
+                res.status(404).json({ msg: 'comment not found' });
+            }
+        })
+        .catch((error) => {
+            console.error(error);
+            res.status(500).json({ msg: 'Internal Server Error' });
+        });
+}*/
