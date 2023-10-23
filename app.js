@@ -1,8 +1,13 @@
+const cors = require('cors');
+
 const express = require('express');
 const app = express();
-const { getAllTopics, getArticleById, getAllArticles, getCommentsById, postCommentToArticle, patchController } = require('./db/controllers/controllers')
+const { getAllTopics, getArticleById, getAllArticles, getCommentsById, postCommentToArticle, patchController, commentDeleteController } = require('./db/controllers/controllers')
 const endpoints = require('./db/endpoints.json')
 const users = require('./db/data/test-data/users')
+
+app.use(cors());
+
 
 app.use(express.json())
 
@@ -24,6 +29,10 @@ app.get('/api/users', (req,res) =>{
 
 
 app.patch('/api/articles/:article_id', patchController)
+
+
+app.delete('api/comments/:comment_id', commentDeleteController)
+
 
 
 
