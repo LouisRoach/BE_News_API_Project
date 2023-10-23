@@ -8,8 +8,8 @@ const users = require('./db/data/test-data/users')
 
 
 
-app.use(express.json())
 app.use(cors());
+app.use(express.json())
 
 app.get('/api/topics',getAllTopics)
 app.get('/api', (req, res) =>{
