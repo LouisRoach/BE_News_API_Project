@@ -59,7 +59,7 @@ describe('GET /api/topics' , () =>{
                 expect(body.article).toHaveProperty('title')
                 expect(body.article).toHaveProperty('article_id')
                 expect(body.article).toHaveProperty('body')
-                expect(body.article).toHaveProperty('body')
+                expect(body.article).toHaveProperty('topic')
                 expect(body.article).toHaveProperty('created_at')
                 expect(body.article).toHaveProperty('votes')
                 expect(body.article).toHaveProperty('article_img_url')
@@ -114,25 +114,25 @@ describe('GET /api/topics' , () =>{
             .then(({body}) =>{
                 console.log(body)
                 
-                body.comment.forEach((comment) => expect(comment).toHaveProperty('comment_id'))
-                body.comment.forEach((comment) => expect(comment).toHaveProperty('votes'))
-                body.comment.forEach((comment) => expect(comment).toHaveProperty('created_at'))
-                body.comment.forEach((comment) => expect(comment).toHaveProperty('author'))
-                body.comment.forEach((comment) => expect(comment).toHaveProperty('body'))
-                body.comment.forEach((comment) => expect(comment).toHaveProperty('article_id'))
+                body.comments.forEach((comment) => expect(comment).toHaveProperty('comment_id'))
+                body.comments.forEach((comment) => expect(comment).toHaveProperty('votes'))
+                body.comments.forEach((comment) => expect(comment).toHaveProperty('created_at'))
+                body.comments.forEach((comment) => expect(comment).toHaveProperty('author'))
+                body.comments.forEach((comment) => expect(comment).toHaveProperty('body'))
+                body.comments.forEach((comment) => expect(comment).toHaveProperty('article_id'))
 
              })
 
         })
 
-        it('responds with an error if link is for non-existent is passed' , () => {
+        it('responds with an error if link is for non-existent article is passed' , () => {
             return request(app)
-            .get('/api/articles/15/comments')
+            .get('/api/articles/200/comments')
             .expect(404)
             .then(({body}) =>{
                 console.log(body)
                
-                expect(body).toEqual({msg: '404 article not found'})
+                expect(body).toEqual({msg: 'Article not found'})
 
         }) 
     })
@@ -143,7 +143,7 @@ describe('GET /api/topics' , () =>{
     .expect(200)
     .then(({body})=>{
         console.log(body)
-        expect(body).toEqual({msg: 'article has no comments'})
+        expect(body).toEqual({msg: 'No comments found for this article'})
 
     })
    })
@@ -216,7 +216,7 @@ describe('GET /api/topics' , () =>{
     })
 
     describe('PATCH /api/articles/:article_id' , () =>{
-        it.only('responds with updated article',  ()=>{
+        it('responds with updated article',  ()=>{
             return request(app)
                 .patch('/api/articles/4')
                 .send({ inc_votes: 5 })
@@ -231,7 +231,7 @@ describe('GET /api/topics' , () =>{
 
         })
 
-        it.only('responds with 400 when invalid id passed' , () =>{
+        it('responds with 400 when invalid id passed' , () =>{
             return request(app)
             .patch('/api/articles/15')
             .expect(400)
@@ -242,7 +242,7 @@ describe('GET /api/topics' , () =>{
             })
         })
 
-        it.only('responds with 400 when inc_votes nan ', () =>{
+        it('responds with 400 when inc_votes nan ', () =>{
             return request(app)
             .patch('/api/articles/4')
             .send({ inc_votes: 'd' })
@@ -254,4 +254,23 @@ describe('GET /api/topics' , () =>{
 
 
         })
-    })})
+    })
+
+})
+
+/*describe.only('DELETE /api/comments/:comment_id', () => {
+    it.only('deletes a comment and responds with status 204', async () => {
+        const response = await request(app)
+            .delete('/api/comments/1') 
+            .expect(204);
+
+       
+        
+    });
+
+    it('responds with status 404 for a non-existent comment_id', async () => {
+        await request(app)
+            .delete('/api/comments/999') 
+            .expect(404);
+    });
+});*/

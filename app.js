@@ -6,9 +6,9 @@ const { getAllTopics, getArticleById, getAllArticles, getCommentsById, postComme
 const endpoints = require('./db/endpoints.json')
 const users = require('./db/data/test-data/users')
 
+
+
 app.use(cors());
-
-
 app.use(express.json())
 
 app.get('/api/topics',getAllTopics)
@@ -31,7 +31,7 @@ app.get('/api/users', (req,res) =>{
 app.patch('/api/articles/:article_id', patchController)
 
 
-app.delete('api/comments/:comment_id', commentDeleteController)
+/*app.delete('api/comments/:comment_id', commentDeleteController)*/
 
 
 
