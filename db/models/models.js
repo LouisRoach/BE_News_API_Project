@@ -28,13 +28,33 @@ exports.selectAllArticles = () => {
 }
 
 exports.selectCommentById = (article_id) =>{
+   
+
+
     return db.query('SELECT * FROM comments WHERE article_id = $1' , [article_id])
         .then((result)=>{
-            if(result.rows.length === 0){
-                return null}
-                return result.rows
-            
-
+             
+            return result.rows
+        
         })
 
+}
+
+exports.addCommentToArticle = (article_id, username, body) =>{
+    console.log('model')
+    return db.query('INSERT INTO comments (article_id, author, body) VALUES ($1, $2, $3) RETURNING *;', [article_id, username, body]).then((comment)=>{
+        console.log(comment, "model")
+        return comment.rows[0]
+    })
+}
+
+
+exports.patchModel = (article_id, inc_votes) =>{
+    return db.query(
+        'UPDATE articles SET votes = votes + $1 WHERE article_id = $2 RETURNING *;',
+        [inc_votes, article_id]
+    )
+    .then((article)=>{
+        return article.rows[0]
+    })
 }
