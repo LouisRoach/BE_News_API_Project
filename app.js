@@ -28,7 +28,7 @@ app.get('/api/users', (req,res) =>{
     res.status(200).send(users)
 })
 
-app.get('api/comments' , (req,res) =>{
+app.get('api/comments', (req,res) =>{
 res.status(200).send(comments)
 })
 
