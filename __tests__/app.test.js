@@ -258,19 +258,3 @@ describe('GET /api/topics' , () =>{
 
 })
 
-/*describe.only('DELETE /api/comments/:comment_id', () => {
-    it.only('deletes a comment and responds with status 204', async () => {
-        const response = await request(app)
-            .delete('/api/comments/1') 
-            .expect(204);
-
-       
-        
-    });
-
-    it('responds with status 404 for a non-existent comment_id', async () => {
-        await request(app)
-            .delete('/api/comments/999') 
-            .expect(404);
-    });
-});*/

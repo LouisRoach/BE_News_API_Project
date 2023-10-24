@@ -130,18 +130,13 @@ exports.getCommentsById = (req, res) => {
   
   }
 
- /*exports.commentDeleteController = (req, res) => {
-    const { comment_id } = req.params;
-    commentDeleteModel(comment_id)
-        .then((result) => {
-            if (result) {
-                res.status(204).send();
-            } else {
-                res.status(404).json({ msg: 'comment not found' });
-            }
-        })
-        .catch((error) => {
-            console.error(error);
-            res.status(500).json({ msg: 'Internal Server Error' });
-        });
-}*/
+ exports.commentDeleteController = (req, res, next) => {
+
+  const { comment_id } = req.params;
+  removeCommentById(comment_id).then(() => {
+      res.status(204).send();
+  })
+  .catch((error) => {
+      next(error)
+  })
+}

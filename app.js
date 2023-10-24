@@ -31,7 +31,7 @@ app.get('/api/users', (req,res) =>{
 app.patch('/api/articles/:article_id', patchController)
 
 
-/*app.delete('api/comments/:comment_id', commentDeleteController)*/
+app.delete('api/comments/:comment_id', commentDeleteController)
 
 
 
