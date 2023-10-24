@@ -20,9 +20,9 @@ app.get('/api/articles/:article_id', getArticleById)
 
 app.get('/api/articles', getAllArticles)
 
-app.get('/api/articles/:article_id/comments' , getCommentsById)
+app.get('/api/articles/:article_id/comments', getCommentsById)
 
-app.post('/api/articles/:article_id/comments' , postCommentToArticle)
+app.post('/api/articles/:article_id/comments', postCommentToArticle)
 
 app.get('/api/users', (req,res) =>{
     res.status(200).send(users)
