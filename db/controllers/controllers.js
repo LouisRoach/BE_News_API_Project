@@ -1,4 +1,4 @@
-const  {selectAllTopics, selectArticleById, selectAllArticles,selectCommentById,addCommentToArticle,patchModel,commentDeleteModel}  = require("../models/models")
+const  {selectAllTopics, selectArticleById, selectAllArticles,selectCommentByArticleId,addCommentToArticle,patchModel,commentDeleteModel, selectCommentByCommentId}  = require("../models/models")
 
 
 exports.getAllTopics = (req,res) => {
@@ -26,7 +26,7 @@ exports.getAllArticles = (req,res) => {
     })
 }
 
-exports.getCommentsById = (req, res) => {
+exports.getCommentsByArticleId = (req, res) => {
     const { article_id } = req.params;
   
     selectArticleById(article_id)
@@ -35,7 +35,7 @@ exports.getCommentsById = (req, res) => {
           return res.status(404).send({ msg: 'Article not found' });
         }
   
-        return selectCommentById(article_id)
+        return selectCommentByArticleId(article_id)
           .then((comments) => {
             if (comments.length === 0) {
               return res.status(200).send({ msg: 'No comments found for this article' });
@@ -138,5 +138,17 @@ exports.getCommentsById = (req, res) => {
   })
   .catch((error) => {
       next(error)
+  })
+}
+
+exports.getCommentByCommentId = (req, res) => {
+  const { comment_id } = req.params;
+
+  selectCommentByCommentId(comment_id).then((comment)=>{
+    if(!comment){
+      return res.status(404).send({msg: '404 comment not found'})
+    }
+    res.status(200).send({comment})
+
   })
 }

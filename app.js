@@ -2,7 +2,7 @@ const cors = require('cors');
 
 const express = require('express');
 const app = express();
-const { getAllTopics, getArticleById, getAllArticles, getCommentsById, postCommentToArticle, patchController, commentDeleteController } = require('./db/controllers/controllers')
+const { getAllTopics, getArticleById, getAllArticles, getCommentsByArticleId, postCommentToArticle, patchController, commentDeleteController, getCommentByCommentId } = require('./db/controllers/controllers')
 const endpoints = require('./db/endpoints.json')
 const users = require('./db/data/test-data/users')
 const comments = require('./db/data/test-data/comments')
@@ -20,7 +20,7 @@ app.get('/api/articles/:article_id', getArticleById)
 
 app.get('/api/articles', getAllArticles)
 
-app.get('/api/articles/:article_id/comments', getCommentsById)
+app.get('/api/articles/:article_id/comments', getCommentsByArticleId)
 
 app.post('/api/articles/:article_id/comments', postCommentToArticle)
 
@@ -31,6 +31,8 @@ app.get('/api/users', (req,res) =>{
 app.get('/api/comments', (req,res) =>{
 res.status(200).send(comments)
 })
+
+app.get('/api/comments/:comment_id', getCommentByCommentId)
 
 
 app.patch('/api/articles/:article_id', patchController)
