@@ -5,7 +5,7 @@ const app = express();
 const { getAllTopics, getArticleById, getAllArticles, getCommentsById, postCommentToArticle, patchController, commentDeleteController } = require('./db/controllers/controllers')
 const endpoints = require('./db/endpoints.json')
 const users = require('./db/data/test-data/users')
-const comments = require('./db/data/test-data/comments')
+const comments = require('./db/data/development-data/comments')
 
 
 
