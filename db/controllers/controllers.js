@@ -20,15 +20,17 @@ exports.getArticleById = (req, res) => {
 })
 }
 
-exports.getAllArticles = (req,res,next) => {
-  const { topic } = req.query
+exports.getAllArticles = (req, res, next) => {
+  const { topic } = req.query;
 
-    selectAllArticles(topic).then((articles)=>{
-        res.status(200).send({articles})
-    }).catch(err => {
-      next(err);
+  selectAllArticles(topic)
+    .then((articles) => {
+      res.status(200).send({ articles });
     })
-}
+    .catch((err) => {
+      next(err);
+    });
+};
 
 exports.getCommentsByArticleId = (req, res) => {
     const { article_id } = req.params;
