@@ -20,9 +20,13 @@ exports.getArticleById = (req, res) => {
 })
 }
 
-exports.getAllArticles = (req,res) => {
-    selectAllArticles().then((articles)=>{
+exports.getAllArticles = (req,res,next) => {
+  const { topic } = req.query
+
+    selectAllArticles(topic).then((articles)=>{
         res.status(200).send({articles})
+    }).catch(err => {
+      next(err);
     })
 }
 

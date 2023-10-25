@@ -18,14 +18,24 @@ exports.selectArticleById = (article_id) => {
     })
 }
 
-exports.selectAllArticles = () => {
-    return db.query('SELECT articles.article_id, articles.title, articles.topic, articles.author, articles.created_at, articles.votes, articles.article_img_url, COUNT(comments.comment_id) AS comment_count FROM articles LEFT JOIN comments ON articles.article_id = comments.article_id GROUP BY articles.article_id ORDER BY created_at DESC;')
-    .then((result)=>{
-        if(!result.rows){
-            return null}
-            return result.rows
-    })
-}
+exports.selectAllArticles = (topic) => {
+    let query = `SELECT articles.*, COUNT(comments.article_id) AS comment_count
+    FROM articles LEFT JOIN comments ON articles.article_id = comments.article_id 
+    GROUP BY articles.article_id
+    ORDER BY created_at DESC;`
+  
+    const queryParams = [];
+    
+    if (topic) {
+      query += ` WHERE topic = $1`;
+      queryParams.push(topic);
+    }
+  
+    return db.query(query, queryParams)
+      .then(result => {
+        return result.rows; 
+      })
+  }
 
 exports.selectCommentByArticleId = (article_id) =>{
    
