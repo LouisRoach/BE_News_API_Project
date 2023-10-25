@@ -19,22 +19,23 @@ exports.selectArticleById = (article_id) => {
 }
 
 exports.selectAllArticles = (topic) => {
-
-    let query = `
-      SELECT * 
-      FROM articles
-      WHERE topic = $1
-      ORDER BY created_at DESC;
-    `
+    let query = `SELECT articles.*, COUNT(comments.article_id) AS comment_count
+    FROM articles LEFT JOIN comments ON articles.article_id = comments.article_id 
+    GROUP BY articles.article_id
+    ORDER BY created_at DESC;`
   
-    const queryParams = [topic];
+    const queryParams = [];
+    
+    if (topic) {
+      query += ` WHERE topic = $1`;
+      queryParams.push(topic);
+    }
   
     return db.query(query, queryParams)
-      .then((result) => {
+      .then(result => {
         return result.rows; 
       })
-
-    }
+  }
 
 exports.selectCommentByArticleId = (article_id) =>{
    
